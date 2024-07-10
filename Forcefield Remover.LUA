@@ -1,5 +1,7 @@
 -- Forcefield remover --
 ------------------------
+-- Place this script inside StarterCharacter
+
 local character = script.Parent
 
 while task.wait() do
