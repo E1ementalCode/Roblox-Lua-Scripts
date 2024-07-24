@@ -1,6 +1,6 @@
 -- Forcefield remover --
 ------------------------
--- Place this script inside StarterCharacter
+-- Place this in a server script inside StarterCharacter
 
 local character = script.Parent
 
