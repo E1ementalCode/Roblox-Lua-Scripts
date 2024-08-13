@@ -6,5 +6,3 @@ Scripts will also include:
 > Notes to help explain what the script does,
 > location to place the script,
 > directions (if necessary)
-
-Have a good day :)
