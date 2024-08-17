@@ -1,14 +1,25 @@
--- Forcefield remover --
-------------------------
--- Place this in a server script inside StarterCharacter
+-- Force field remover --
+-------------------------
+
+--[[
+
+Functionality: 
+ > Destroys a player's forcefield on spawn
+
+Instructions: 
+ > Paste this into a server script
+ > Place script inside of StarterCharacterScripts
+
+--]]
+
+-------------------------
 
 local character = script.Parent
 
 while task.wait() do
 	local forcefield = character:FindFirstChild("ForceField")
-	-- If forcefield exists, destroy it
 	if forcefield then
 		forcefield:Destroy()
-		break -- End loop
+		break
 	end
 end
