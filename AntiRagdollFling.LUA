@@ -15,11 +15,8 @@ Instructions:
 
 -------------------------------
 
--- Global variables
 local character = script.Parent
 local humanoid = character:WaitForChild("Humanoid")
-
-
 
 -- Disable humanoid states
 humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
