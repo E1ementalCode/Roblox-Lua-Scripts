@@ -29,11 +29,12 @@ local function CreateHitbox()
 	hitbox.CanCollide = false
 	hitbox.Massless = true
 	hitbox.CFrame = character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -2) -- Front of player
+	game.Debris:AddItem(hitbox, 0.35)
 
 	-- Create weld
 	local newWeld = Instance.new("WeldConstraint", character")
 	newWeld.Part0 = hitbox
-	newWeld.Part1 = character.RightArm
+	newWeld.Part1 = character["Right Arm"]
 	game.Debris:AddItem(newWeld, attackDelay)
 
 	return hitbox
@@ -46,7 +47,7 @@ local function HandleHit(hit, hitbox)
 		local distance = (hitbox.Position - hit.Position).Magnitude
 
 		-- Check distance
-		if distance > hitbox.Size.X + 4 then return end
+		if distance > hitbox.Size.X + 5 then return end
 
 		-- Damage player
 		if humanoid and not debounceTable[humanoid] then
@@ -72,9 +73,6 @@ tool.Activated:Connect(function()
 		hitbox.Touched:Connect(function(hit)
 			HandleHit(hit, hitbox)
 		end)
-
-		-- Destroy hitbox
-		task.wait(0.35) hitbox:Destroy()
 
 		task.wait(attackDelay)
 		attacking = false
