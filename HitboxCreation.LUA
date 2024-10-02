@@ -1,5 +1,19 @@
--- Tool activation --
----------------------
+-- Hitbox/attack script --
+--------------------------
+
+--[[
+
+Functionality: 
+ > Created a hitbox that damages nearby players
+
+Instructions: 
+ > Paste this into a tool in StarterPack
+ > Paste into a server script
+
+--]]
+
+--------------------------
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 -- Global variables
