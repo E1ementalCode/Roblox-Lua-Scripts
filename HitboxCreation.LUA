@@ -1,80 +1,88 @@
--- Hitbox creation/detection --
--------------------------------
+-- Tool activation --
+---------------------
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Players = game:GetService("Players")
 
 -- Global variables
 local tool = script.Parent
 local player = tool.Parent.Parent
-local character = player.Character or player.CharacterAdded:Wait()
+local character = player.Character
 
 -- Script variables
 local debounceTable = {}
 local attacking = false
-local hitboxSize = 5
-local damage = 10
 local attackDelay = 0.5
+local hitboxSize = 4
+local damage = 10
 
--------------------------------
+---------------------
 
 
 
 --[[ Create hitbox ]]--
 local function CreateHitbox()
-	local hitbox = Instance.new("Part", workspace)
-	hitbox.Name = "Hitbox"
+	local hitbox = Instance.new("Part", tool)
+	-- Position hitbox
 	hitbox.Size = Vector3.new(hitboxSize, hitboxSize, hitboxSize)
+	hitbox.CFrame = character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -2) -- Front of player
 	-- Customize hitbox
 	hitbox.Transparency = 1
+	hitbox.Anchored = false
 	hitbox.CanCollide = false
 	hitbox.Massless = true
-	hitbox.CFrame = character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -2) -- Front of player
 	game.Debris:AddItem(hitbox, 0.35)
-
-	-- Create weld
-	local newWeld = Instance.new("WeldConstraint", character")
+	
+	-- Weld constraint
+	local newWeld = Instance.new("WeldConstraint", hitbox)
 	newWeld.Part0 = hitbox
 	newWeld.Part1 = character["Right Arm"]
-	game.Debris:AddItem(newWeld, attackDelay)
-
+	game.Debris:AddItem(newWeld, 1)
+	
 	return hitbox
 end
 
---[[ Detect collisions ]]--
+
+
+--[[ Hitbox handling ]]--
 local function HandleHit(hit, hitbox)
-	if hit.Name == "HumanoidRootPart" and hit.Parent ~= character then
-		local humanoid = hit.Parent:FindFirstChild("Humanoid")
-		local distance = (hitbox.Position - hit.Position).Magnitude
-
+	if hit.Name == "HumanoidRootPart" and hit.Position.Y < 25 and hit.Parent ~= character then
+		local newHumanoid = hit.Parent:FindFirstChild("Humanoid")
+		local distance = (hit.Position - hitbox.Position).Magnitude
+		
 		-- Check distance
-		if distance > hitbox.Size.X + 5 then return end
-
-		-- Damage player
-		if humanoid and not debounceTable[humanoid] then
-			debounceTable[humanoid] = true
-
-			humanoid.Health -= damage
-
+		if distance > hitbox.Size.X * 2 then return end
+		
+		if not debounceTable[newHumanoid] then
+			debounceTable[newHumanoid] = true
+			
+			newHumanoid.Health -= damage
+			
+			-- Keep track of players
 			task.wait(attackDelay)
-			debounceTable[humanoid] = nil
+			debounceTable[newHumanoid] = nil
 		end
 	end
 end
 
---[[ Activate tool ]]--
+
+
+--[[ Attack activation ]]--
 tool.Activated:Connect(function()
+	-- Initialize variables
 	local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-
-	if not attacking and humanoidRootPart then
+	local humanoid = character:FindFirstChild("Humanoid")
+	
+	if not attacking and humanoidRootPart and humanoidRootPart.Position.Y < 25 then
 		attacking = true
-
+		
+		task.wait(0.1)
+		
 		-- Create hitbox
 		local hitbox = CreateHitbox()
 		hitbox.Touched:Connect(function(hit)
 			HandleHit(hit, hitbox)
 		end)
-
+		
 		task.wait(attackDelay)
-		attacking = false
+		attacking = false -- Cancel attack
 	end
 end)
