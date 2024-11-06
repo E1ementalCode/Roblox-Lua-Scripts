@@ -1,5 +1,20 @@
--- Anti-fly script --
----------------------
+-- AntiFly anticheat script --
+------------------------------
+
+--[[
+
+Functionality: 
+ > Prevents most fly exploits
+ > Kicks players once flying is detected
+
+Instructions: 
+ > Paste this into a local script
+ > Place script inside of StarterPlayer.StarterPlayerScripts or a StarterGui element
+
+--]]
+
+------------------------------
+
 local Players = game:GetService("Players")
 
 -- Global variables
